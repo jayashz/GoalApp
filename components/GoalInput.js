@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { View, TextInput, Button } from "react-native";
-
+import { View, TextInput, Button, Modal } from "react-native";
 import { StyleSheet } from "react-native";
 
-const GoalInput = ({ inpHandler, addGoal }) => {
+const GoalInput = ({ addGoal, visibility, hide }) => {
   const [enteredGoal, setEnteredGoal] = useState("");
   function inputHandler(enteredText) {
     setEnteredGoal(enteredText);
@@ -11,20 +10,33 @@ const GoalInput = ({ inpHandler, addGoal }) => {
   function addGoalHandler() {
     addGoal(enteredGoal);
     setEnteredGoal("");
+    hide();
   }
 
   return (
-    
+    <Modal
+      visible={visibility}
+      animationType="slide"
+      style={{ backgroundColor: "red" }}
+    >
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Place your goal here"
           style={styles.textInput}
           onChangeText={inputHandler}
           value={enteredGoal}
+          placeholderTextColor='#3C3D37'
         ></TextInput>
-        <Button title="Add Goal" color="red" onPress={addGoalHandler}></Button>
+        <View style={styles.buttonGrp}>
+          <Button
+            title="Add Goal"
+            color="#800000"
+            onPress={addGoalHandler}
+          ></Button>
+          <Button title="X" color="#800000" onPress={hide}></Button>
+        </View>
       </View>
-
+    </Modal>
   );
 };
 
@@ -32,21 +44,23 @@ export default GoalInput;
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flex:1,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flex: 1,
+    flexDirection: "col",
+    justifyContent: "center",
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderBlockColor: "#cccccc",
-    marginBottom: 15,
     color: "white",
+    backgroundColor: "#F2E8C6",
   },
   textInput: {
     borderWidth: 1,
-    borderColor: "#cccccc",
-    padding: 5,
+    borderColor:'#3C3D37',
+    padding: 12,
     borderRadius: 5,
     width: "70%",
-    marginRight: 3,
+    backgroundColor:'#DAD4B5'
+  },
+  buttonGrp: {
+    marginTop: 10,
+    gap: 3,
   },
 });

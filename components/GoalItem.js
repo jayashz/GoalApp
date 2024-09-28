@@ -1,11 +1,14 @@
 import React from 'react'
-import { StyleSheet,View,Text } from 'react-native';
-const GoalItem = (props) => {
-
+import { StyleSheet,View,Text, Pressable } from 'react-native';
+const GoalItem = ({text,onDelete,id}) => {
+  
   return (
+    <Pressable onLongPress={onDelete.bind(this,id)} style={{flex:1}}>
     <View style={styles.goalItem}>
-          <Text style={{color:'white'}}>{props.text}</Text>
+          <Text style={{color:'white'}}>{text}</Text>
     </View>
+    </Pressable>
+
   )
 }
 

@@ -8,34 +8,39 @@ import {
   FlatList,
 } from "react-native";
 import GoalItem from "./components/GoalItem";
+import GoalInput from "./components/GoalInput";
 export default function App() {
-  const [enteredGoal, setEnteredGoal] = useState("");
   const [courseGoals, setCourseGoals] = useState([]);
+  function addGoalHandler(enteredGoal) {
+    if (enteredGoal.trim().length > 0) {
+      setCourseGoals((currentGoals) => [
+        ...currentGoals,
+        { text: enteredGoal, key: Math.floor(Math.random() * 100).toString() },
+      ]);
+    }
+  }
+  function deleteGoalHandler(id) {
 
-  function inputHandler(enteredText) {
-    setEnteredGoal(enteredText);
+    setCourseGoals((currentGoals) => {
+      return currentGoals.filter((goal) => goal.key !== id)
+    });
+    
   }
-  function addGoalHandler() {
-    setCourseGoals((currentGoals) => [
-      ...currentGoals,
-      { text: enteredGoal, key: (Math.random() * 100).toString() },
-    ]);
-  }
+
   return (
     <View style={styles.appContainer}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Place your goal here"
-          style={styles.textInput}
-          onChangeText={inputHandler}
-        ></TextInput>
-        <Button title="Add Goal" color="red" onPress={addGoalHandler}></Button>
-      </View>
+      <GoalInput addGoal={addGoalHandler} />
       <View style={styles.goalsContainer}>
         <FlatList
           data={courseGoals}
           renderItem={(itemData) => {
-            return <GoalItem text={itemData.item.text} />;
+            return (
+              <GoalItem
+                text={itemData.item.text}
+                id={itemData.item.key}
+                onDelete={deleteGoalHandler}
+              />
+            );
           }}
         />
       </View>
@@ -49,24 +54,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     flex: 1,
   },
-  inputContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBlockColor: "#cccccc",
-    marginBottom: 15,
-    color: "white",
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    padding: 5,
-    borderRadius: 5,
-    width: "70%",
-    marginRight: 3,
-  },
+
   goalsContainer: {
     flex: 4,
   },
